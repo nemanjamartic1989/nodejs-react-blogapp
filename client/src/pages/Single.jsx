@@ -4,6 +4,7 @@ import PostImage from "../../images/post.png"
 import EditImage from "../../images/edit.png"
 import DeleteImage from "../../images/delete.png"
 import { Link } from 'react-router-dom'
+import Menu from '../components/Menu'
 
 const Single = () => {
     return (
@@ -33,7 +34,7 @@ const Single = () => {
                    and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
                 </p>
             </div>
-            <div className='menu'>M</div>
+            <Menu />
         </div>
     )
 }
