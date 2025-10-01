@@ -1,7 +1,23 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PostImage from "../../images/post.png"
+import axios from 'axios'
 
-const Menu = () => {
+const Menu = ({cat}) => {
+  const [posts, setPosts] = useState([])
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(`/posts/?cat=${cat}`)
+        setPosts(res.data)
+      } catch () {
+        console.log(err)
+      }
+    }
+
+    fetchData()
+  }, [cat])
+
   return (
     <div className='menu'>
         <h1>Other posts</h1>
