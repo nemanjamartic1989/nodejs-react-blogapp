@@ -1,3 +1,4 @@
+import axios from 'axios'
 import React, {useState} from 'react'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
@@ -8,8 +9,28 @@ const Write = () => {
     const [file, setFile] = useState(null)
     const [category, setCategory] = useState('')
 
+    const upload = async () => {
+        try {
+            const formData = new FormData()
+            formData.append("file", file)
+            const result = await axios.post('/upload', formData)
+
+            return result.data;
+        } catch (error) {
+
+        }
+    }
+
     const handleClick = async e => {
         e.preventDefault()
+
+        const imgUrl = upload()
+
+        try {
+
+        } catch (error) {
+
+        }
     }
 
     return (
