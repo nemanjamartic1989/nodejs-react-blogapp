@@ -1,13 +1,18 @@
 import axios from 'axios'
+import moment from 'moment'
 import React, {useState} from 'react'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 const Write = () => {
-    const [value, setValue] = useState('')
-    const [title, setTitle] = useState('')
+    const state = useLocation().state
+    const [value, setValue] = useState(state?.title || '')
+    const [title, setTitle] = useState(state?.desc || '')
     const [file, setFile] = useState(null)
-    const [category, setCategory] = useState('')
+    const [category, setCategory] = useState(state?.category || '')
+
+    const navigate = useNavigate();
 
     const upload = async () => {
         try {
@@ -24,10 +29,23 @@ const Write = () => {
     const handleClick = async e => {
         e.preventDefault()
 
-        const imgUrl = upload()
+        const imgUrl = await upload()
 
         try {
+            state ? await axios.put(`/posts/${state.id}`, {
+                title,
+                desc:value,
+                category,
+                img:file ? imgUrl : ''
+            }) : await axios.post(`/posts/`, {
+                title,
+                desc:value,
+                category,
+                img:file ? imgUrl : '',
+                date: moment(Date.now()).moment().format("YYYY-MM-DD HH:mm:ss")
+            })
 
+            navigate('/')
         } catch (error) {
 
         }
@@ -36,7 +54,7 @@ const Write = () => {
     return (
         <div className='add'>
             <div className='content'>
-                <input type="text" onChange={e => setTitle(e.target.value)} placeholder="Title"/>
+                <input type="text" value={title} onChange={e => setTitle(e.target.value)} placeholder="Title"/>
                 <div className='editorContainer'>
                     <ReactQuill className='editor' theme="snow" value={value} onChange={setValue} />
                 </div>
@@ -60,27 +78,27 @@ const Write = () => {
                 <div className='item'>
                     <h1>Category</h1>
                     <div className='category'>
-                        <input type="radio" name="category" value="art" id="art" onChange={e => setCategory(e.target.value)}/>
+                        <input type="radio" checked={category === 'art'} name="category" value="art" id="art" onChange={e => setCategory(e.target.value)}/>
                         <label htmlFor='art'>Art</label>
                     </div>
 
                     <div className='category'>
-                        <input type="radio" name="category" value="science" id="science" onChange={e => setCategory(e.target.value)}/>
+                        <input type="radio" checked={category === 'science'} name="category" value="science" id="science" onChange={e => setCategory(e.target.value)}/>
                         <label htmlFor='science'>Science</label>
                     </div>
 
                     <div className='category'>
-                        <input type="radio" name="category" value="technology" id="technology" onChange={e => setCategory(e.target.value)}/>
+                        <input type="radio" checked={category === 'technology'} name="category" value="technology" id="technology" onChange={e => setCategory(e.target.value)}/>
                         <label htmlFor='technology'>Technology</label>
                     </div>
 
                     <div className='category'>
-                        <input type="radio" name="category" value="cinema" id="cinema" onChange={e => setCategory(e.target.value)}/>
+                        <input type="radio" checked={category === 'cinema'} name="category" value="cinema" id="cinema" onChange={e => setCategory(e.target.value)}/>
                         <label htmlFor='cinema'>Cinema</label>
                     </div>
 
                     <div className='category'>
-                        <input type="radio" name="category" value="design" id="design" onChange={e => setCategory(e.target.value)}/>
+                        <input type="radio" checked={category === 'design'} name="category" value="design" id="design" onChange={e => setCategory(e.target.value)}/>
                         <label htmlFor='design'>Design</label>
                     </div>
 

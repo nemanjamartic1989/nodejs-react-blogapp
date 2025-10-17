@@ -20,12 +20,14 @@ const Menu = ({cat}) => {
 
   return (
     <div className='menu'>
-        <h1>Other posts</h1>
-        <div className='post'>
-            <img src={PostImage} alt="" />
-            <h2>Post Title</h2>
+        <h1>Other posts you may like</h1>
+        {posts.map((post) => (
+          <div className='post'>
+            <img src={`../upload/${post.img}`} alt="" />
+            <h2>{post.title}</h2>
             <button>Read More</button>
-        </div>
+          </div>
+        ))}
     </div>
   )
 }
